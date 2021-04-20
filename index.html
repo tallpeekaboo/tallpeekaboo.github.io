@@ -1,0 +1,377 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>peekaboo的技术博客</title><meta name="author" content="peekaboo"><meta name="copyright" content="peekaboo"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="peekaboo的技术博客">
+<meta property="og:url" content="https://tallpeekaboo.github.io/index.html">
+<meta property="og:site_name" content="peekaboo的技术博客">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://tallpeekaboo.github.io/img/avatar.png">
+<meta property="article:author" content="peekaboo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://tallpeekaboo.github.io/img/avatar.png"><link rel="shortcut icon" href="/tallpeekaboo.github.io/img/favicon.png"><link rel="canonical" href="https://tallpeekaboo.github.io/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/tallpeekaboo.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/tallpeekaboo.github.io/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+const saveToLocal = {
+  // ttl 單位是 天
+  set: function setWithExpiry(key, value, ttl) {
+    if (ttl === 0) return
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}
+
+// https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+const getScript = url => new Promise((resolve, reject) => {
+  const script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.onerror = reject
+  script.onload = script.onreadystatechange = function() {
+    const loadState = this.readyState
+    if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+    script.onload = script.onreadystatechange = null
+    resolve()
+  }
+  document.head.appendChild(script)
+})</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-04-20 09:56:03'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><meta name="generator" content="Hexo 5.2.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/tallpeekaboo.github.io/img/avatar.png" onerror="onerror=null;src='/img/wallhaven-vg7lv3_1920x1080.png'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/tallpeekaboo.github.io/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tallpeekaboo.github.io/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a></div></div></div><hr/></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('/tallpeekaboo.github.io/img/wuhu.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/tallpeekaboo.github.io/">peekaboo的技术博客</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">peekaboo的技术博客</h1><div id="site_social_icons"><a class="social-icon" href="https://github.com/tallpeekaboo" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:xxxxxx@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left_radius"><a href="/tallpeekaboo.github.io/2021/04/13/snowflake-%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95/" title="snowflake(雪花算法)">     <img class="post_bg" src="https://w.wallhaven.cc/full/wq/wallhaven-wqe6m7.jpg" onerror="this.onerror=null;this.src='/tallpeekaboo.github.io/img/wallhaven-vg7lv3_1920x1080.png'" alt="snowflake(雪花算法)"></a></div><div class="recent-post-info"><a class="article-title" href="/tallpeekaboo.github.io/2021/04/13/snowflake-%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95/" title="snowflake(雪花算法)">snowflake(雪花算法)</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-04-13T12:01:07.000Z" title="Created 2021-04-13 20:01:07">2021-04-13</time></span></div><div class="content">一般情况下,订单编号都是唯一的,普通人只知道用uuid生成订单号,但是用uuid生成的编号做主键,会十分影响查询效率,而且丝毫没有一点顺序,而mysql主键的特点就是唯一 有序,所以uuid并不适合作为主键,但是雪花算法生成的编号却正好满足了订单号和mysql的所有需求,而且雪花算法还可以分表存储,当业务量巨大的时,雪花算法也可以轻松满足snowflake会生成一个64位的二进制整数,然后转换成十进制的数,64位二进制数由如下部分组成:
+1位标识符：始终是0
+41位时间戳：41位时间戳不是存储当前时间的时间戳，而是存储时间截的差值（当前时间截 - 开始时间截 )得到的值，这里的的开始时间截，一般是我们的id生成器开始使用的时间，由我们程序来指定的10位机器标识码：可以部署在1024个节点，如果机器分机房（IDC）部署，这10位可以由 5位机房ID + 5位机器ID 组成12位序列：毫秒内的计数，12位的计数顺序号支持每个节点每毫秒(同一机器，同一时间截)产生4096个ID序号
+1. 安装库1pip install pysnowflake
+
+2. 启动服务1snowflake_start ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/tallpeekaboo.github.io/2021/03/29/summary/" title="summary">     <img class="post_bg" src="https://w.wallhaven.cc/full/nz/wallhaven-nz16og.jpg" onerror="this.onerror=null;this.src='/tallpeekaboo.github.io/img/wallhaven-vg7lv3_1920x1080.png'" alt="summary"></a></div><div class="recent-post-info"><a class="article-title" href="/tallpeekaboo.github.io/2021/03/29/summary/" title="summary">summary</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-03-29T00:40:24.000Z" title="Created 2021-03-29 08:40:24">2021-03-29</time></span></div><div class="content">用户的三种校验方式
+用户名和密码
+
+
+what you know
+
+
+
+用户名和密钥
+
+
+what you have
+
+
+
+用户名和实体
+
+
+who you are
+
+
+
+
+
+docker的基本操作
+docker是一种容器技术,有三大核心:  镜像   容器    仓库
+
+
+查看本地所有镜像
+docker images
+
+
+拉取镜像
+docker pull 镜像名称
+
+
+删除镜像
+docker rmi 镜像id
+
+
+镜像的导出
+docker save -o ‘c:/tmp/redis.tar’ redis
+
+
+镜像的导入
+docker load -i ‘c:/tmp/redis.tar’
+
+
+当前有哪些容器正在启动
+docker ps
+
+
+停止docker服务
+docker stop 容器id
+
+
+
+
+python实现设计模式——工厂模式工厂模式，顾名思义就是我们可以通过指定的”工厂“获取需要的”产品“，在设计模式中主要用于抽象对象的创建过程，让用户可以指定自己想要的对象而不必关心对象的实例化过程。这样做的好处就是用户只需要通过固定的接口而不是直接去调用类的实例化方法来获取一个对象的实 ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/tallpeekaboo.github.io/2021/03/24/websocket%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE/" title="websocket网络传输协议">     <img class="post_bg" src="https://w.wallhaven.cc/full/39/wallhaven-39zg5v.jpg" onerror="this.onerror=null;this.src='/tallpeekaboo.github.io/img/wallhaven-vg7lv3_1920x1080.png'" alt="websocket网络传输协议"></a></div><div class="recent-post-info"><a class="article-title" href="/tallpeekaboo.github.io/2021/03/24/websocket%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE/" title="websocket网络传输协议">websocket网络传输协议</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-03-24T13:42:13.000Z" title="Created 2021-03-24 21:42:13">2021-03-24</time></span></div><div class="content">WebSocket网络传输协议
+websocket是一种网络传输协议，可在单个TCP连接上进行双全工通信，位于osi模型的应用层。
+
+工作原理
+打开Web浏览器，并访问Web站点。
+Web浏览器（客户端）与Web服务端建立连接。
+web浏览器（客户端）能定时收发Web服务端数据，Web服务端也能定时收发Web浏览器数据。
+
+WebSocket与HTTP协议
+WebSocket协议和HTTP协议都是OSI模型的应用层协议，但为什么有了HTTP还要使用WebSocket呢？
+首先WebSocket是一个持久化的协议，长连接
+因为HTTP协议只能由客户端发起请求，也就是一次请求对应了一次相应，当这个相应结束后也就代表着这次通信结束了
+比如说股票的走势图，可能每分钟都要发起一次请求来想server来获取想要的数据来渲染，一分钟发一次也许还可以接受
+但如果说是心电图这种的情况，可能每秒钟都要发送一次请求，这只能使用轮询，并且非常浪费资源和带宽，无法做到server主动的想client推送信息
+所以HTML5定义了Websocket协议，能够更好的节省服务器资源和带宽，并且能够更实时的进行通讯
+
+ ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/tallpeekaboo.github.io/2021/03/22/%E5%B9%B6%E5%8F%91%E5%B9%B6%E8%A1%8C%E9%AB%98%E5%B9%B6%E5%8F%91/" title="并发并行高并发">     <img class="post_bg" src="https://w.wallhaven.cc/full/m9/wallhaven-m9q6e9.jpg" onerror="this.onerror=null;this.src='/tallpeekaboo.github.io/img/wallhaven-vg7lv3_1920x1080.png'" alt="并发并行高并发"></a></div><div class="recent-post-info"><a class="article-title" href="/tallpeekaboo.github.io/2021/03/22/%E5%B9%B6%E5%8F%91%E5%B9%B6%E8%A1%8C%E9%AB%98%E5%B9%B6%E5%8F%91/" title="并发并行高并发">并发并行高并发</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-03-22T13:22:12.000Z" title="Created 2021-03-22 21:22:12">2021-03-22</time></span></div><div class="content">并行
+多个CPU实例或者多个机器同时执行一段逻辑，是真正的同时。
+
+并发
+通过CPU调度算法，让用户看上去是同时执行，实际的CPU操作层面不是真正的同时。只不过是系统的不断切换，但是切换速度特别快，用户感觉不到，误认为是同时。
+
+高并发
+高并发是指一种系统运行过程中遇到的“段时间内遇到大量操作请求”的情况，就类似Web系统，大量访问等。像天猫双十一，春节12306抢票等。这种情况下会导致系统这段时间内大量执行操作，如果处理不好，不仅降低用户体验，还会导致系统宕机，甚至是OOM(内存溢出)异常，系统停止工作等。
+
+多线程与高并发的联系
+多线程只是在同/异步角度上解决高并发问题的其中的一个方法手段，是在同一时刻利用计算机闲置资源的一种方式。
+多线程在高并发问题中的作用就是充分利用计算机资源，使计算机的资源在每一时刻都能达到最大的利用率，不至于浪费计算机资源使其闲置。
+同步与异步
+同步
+
+同步的思想就是当我所有的操作都做完了再返回响应给用户，这样用户在等待的时间太长，让用户感觉到是卡主了一样，用户体验贼差。
+
+
+异步
+
+可以举个例子来让大家理解，就像我们去买票，暑假的时候景点一票难求，我们在 ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/tallpeekaboo.github.io/2021/03/22/golang/" title="golang">     <img class="post_bg" src="https://w.wallhaven.cc/full/57/wallhaven-577839.jpg" onerror="this.onerror=null;this.src='/tallpeekaboo.github.io/img/wallhaven-vg7lv3_1920x1080.png'" alt="golang"></a></div><div class="recent-post-info"><a class="article-title" href="/tallpeekaboo.github.io/2021/03/22/golang/" title="golang">golang</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-03-22T02:56:27.000Z" title="Created 2021-03-22 10:56:27">2021-03-22</time></span></div><div class="content">Golang
+
+从main函数初见Golang语法注意点
+
+
+
+
+执行go文件
+go run 文件名
+
+
+生成一个可执行exe文件
+go build 文件名
+
+
+
+</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/tallpeekaboo.github.io/2021/03/21/mysql-redis-mongoDB%E7%9A%84%E5%8C%BA%E5%88%AB/" title="mysql/redis/mongoDB的区别">     <img class="post_bg" src="https://w.wallhaven.cc/full/l3/wallhaven-l392mr.jpg" onerror="this.onerror=null;this.src='/tallpeekaboo.github.io/img/wallhaven-vg7lv3_1920x1080.png'" alt="mysql/redis/mongoDB的区别"></a></div><div class="recent-post-info"><a class="article-title" href="/tallpeekaboo.github.io/2021/03/21/mysql-redis-mongoDB%E7%9A%84%E5%8C%BA%E5%88%AB/" title="mysql/redis/mongoDB的区别">mysql/redis/mongoDB的区别</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-03-21T12:09:11.000Z" title="Created 2021-03-21 20:09:11">2021-03-21</time></span></div><div class="content">MySQL关系型数据库
+在不同的引擎上有不同的存储方式。
+查询语句是使用传统的sql语句，拥有较为成熟的体系，成熟度很高。
+开源数据库的份额在不断增加，mysql的份额页在持续增长。
+缺点就是在海量数据处理的时候效率会显著变慢。
+但是自从MySQL被Oracle收购的时候起，它就已经不是开源软件的最佳选择了。
+使用场景：高度事务性的系统。例如银行或者会计系统，传统的关系型数据库目前还是更实用于需要大量原子性复杂事务的应用程序
+MongoDB是使用MongoDB是由c++语言编写的，是基于分散式档案存储的开源资料库系统。
+在传统的关系型数据库中，数据是以表单为媒介进行存储的，每个表单均拥有纵向的列和横向的行。
+本地加持久化，有自己独特的MongoDB的查询方式
+相对于MySQL,MongoDB以一种直观文档的方式来完成数据的存储。它很像json格式，不过数据在存储的时候 MongoDB 数据库为文档增加了序列化的操作，最终存进磁盘的其实是一种叫做 BSON 的格式，即 Binary-JSON。
+数据存储在硬盘上的，只不过需要经常读取的数据会被加载到内存中，将数据存储在物理内存中，从而达到 ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/tallpeekaboo.github.io/2021/03/18/mongoDB/" title="mongoDB">     <img class="post_bg" src="https://w.wallhaven.cc/full/83/wallhaven-83q9pk.jpg" onerror="this.onerror=null;this.src='/tallpeekaboo.github.io/img/wallhaven-vg7lv3_1920x1080.png'" alt="mongoDB"></a></div><div class="recent-post-info"><a class="article-title" href="/tallpeekaboo.github.io/2021/03/18/mongoDB/" title="mongoDB">mongoDB</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-03-18T13:10:18.000Z" title="Created 2021-03-18 21:10:18">2021-03-18</time></span></div><div class="content">python操作MongoDB
+下载python中的MongoDB1pip install pymongo
+
+下载完成之后，进行连接（此处要导包）12from pymongo import MongoClientclient = MongoClient(host=’127.0.0.1’, port=27017)
+
+接下来需要进入我们在MongoDB创建的数据库此处没有创建数据库的，需要手动创建MongoDB数据库（看上方的基本语法）
+1db = client.z_Cate
+
+指定集合1table = db.CateTemplate
+
+建立好之后，就可以进行查询了1234567891011def get(self, request):    # 进入数据库    db = client.z_Cate    # 集合    zst = db.CateTemplate    id = request.GET.get(&#x27;id&#x27;, None)    wid = WorkOrderModel.objects.filter(id=id).first()    data = &#1 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/tallpeekaboo.github.io/2021/03/03/docker/" title="docker">     <img class="post_bg" src="https://w.wallhaven.cc/full/4y/wallhaven-4yd8wx.jpg" onerror="this.onerror=null;this.src='/tallpeekaboo.github.io/img/wallhaven-vg7lv3_1920x1080.png'" alt="docker"></a></div><div class="recent-post-info"><a class="article-title" href="/tallpeekaboo.github.io/2021/03/03/docker/" title="docker">docker</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-03-03T01:07:59.000Z" title="Created 2021-03-03 09:07:59">2021-03-03</time></span></div><div class="content">docker
+docker三大核心:镜像,容器,仓库,容器依赖于镜像
+
+查看本地镜像源
+
+docker images
+12345- 将镜像导出  - &#96;&#96;&#96;dockerfile    docker save -o &#39;c:&#x2F;tmp&#x2F;redis.tar&#39; redis
+
+
+
+将镜像导入
+
+docker load -i &#39;c:/tmp/redis.tar&#39;
+12345- docker启动redis  - &#96;&#96;&#96;dockerfile    docker run -p 6380:6379 redis
+
+
+
+本地连接docker端redis
+
+redis-cli -h 192.168.99.100 -p 6380
+12345- 查看正在运行的镜像  - &#96;&#96;&#96;dockerfile    docker ps
+
+
+
+暂停docker正在进行的镜像
+
+docker stop 镜像id
+12345- 启动镜像  - &#96;&#96;&#96;dockerfile    docker ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/tallpeekaboo.github.io/2021/03/01/ant%E7%BB%84%E4%BB%B6/" title="ant组件">     <img class="post_bg" src="https://w.wallhaven.cc/full/39/wallhaven-39vydv.jpg" onerror="this.onerror=null;this.src='/tallpeekaboo.github.io/img/wallhaven-vg7lv3_1920x1080.png'" alt="ant组件"></a></div><div class="recent-post-info"><a class="article-title" href="/tallpeekaboo.github.io/2021/03/01/ant%E7%BB%84%E4%BB%B6/" title="ant组件">ant组件</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-03-01T06:56:37.000Z" title="Created 2021-03-01 14:56:37">2021-03-01</time></span></div><div class="content">Ant参考地址
+https://www.antdv.com/components/icon-cn/
+
+button
+主要按钮
+
+1&lt;a-button type&#x3D;&#39;primary&#39;&gt;主要按钮&lt;&#x2F;a-button&gt;
+
+
+警告按钮
+
+1&lt;a-button type&#x3D;&quot;danger&quot;&gt;警告按钮&lt;&#x2F;a-button&gt;
+
+
+普通按钮
+
+1&lt;a-button&gt;普通按钮&lt;&#x2F;a-button&gt;
+
+
+
+输入框
+文本输入框
+placeholder=’’  添加提示字
+prefix=’’  在输入框加上前缀
+suffix=’’  在输入框加上后缀
+
+
+
+1&lt;a-input placeholder&#x3D;&quot;提示字&quot;&gt;&lt;&#x2F;a-input&gt;
+
+
+
+打分评价1&lt;a-rate v-model&#x3D;&quot;value&quot;&#x2F;&gt;
+
+</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/tallpeekaboo.github.io/2021/01/19/%E9%80%92%E5%BD%92%E8%8E%B7%E5%8F%96%E5%B1%82%E7%BA%A7%E7%BB%93%E6%9E%84/" title="递归获取层级结构">     <img class="post_bg" src="https://w.wallhaven.cc/full/8o/wallhaven-8o5dq2.jpg" onerror="this.onerror=null;this.src='/tallpeekaboo.github.io/img/wallhaven-vg7lv3_1920x1080.png'" alt="递归获取层级结构"></a></div><div class="recent-post-info"><a class="article-title" href="/tallpeekaboo.github.io/2021/01/19/%E9%80%92%E5%BD%92%E8%8E%B7%E5%8F%96%E5%B1%82%E7%BA%A7%E7%BB%93%E6%9E%84/" title="递归获取层级结构">递归获取层级结构</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2021-01-19T13:14:46.000Z" title="Created 2021-01-19 21:14:46">2021-01-19</time></span></div><div class="content">django构造课程分类层级关系1234567891011121314151617def get_tree(data):    lists = []    tree = &#123;&#125;    for item in data:        tree[item[&#x27;id&#x27;]] = item    for i in data:        if not i[&#x27;pid&#x27;]:            lists.append(tree[i[&#x27;id&#x27;]])        else:            parent_id = i[&#x27;pid&#x27;]            if &#x27;children&#x27; not in tree[parent_id]:                tree[parent_id][&#x27;children&#x27;] = []            tree[parent_id][&#x27;children&#x27;].append(tree[i[&#x2 ...</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/tallpeekaboo.github.io/page/2/">2</a><a class="extend next" rel="next" href="/tallpeekaboo.github.io/page/2/"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/tallpeekaboo.github.io/img/avatar.png" onerror="this.onerror=null;this.src='/tallpeekaboo.github.io/img/wallhaven-vg7lv3_1920x1080.png'" alt="avatar"/><div class="author-info__name">peekaboo</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/tallpeekaboo.github.io/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a></div><div class="card-info-data-item is-center"><a href="/tallpeekaboo.github.io/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tallpeekaboo"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tallpeekaboo" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:xxxxxx@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">欢迎来到peekabo的技术博客</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/tallpeekaboo.github.io/2021/04/13/snowflake-%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95/" title="snowflake(雪花算法)"><img src="https://w.wallhaven.cc/full/wq/wallhaven-wqe6m7.jpg" onerror="this.onerror=null;this.src='/tallpeekaboo.github.io/img/wallhaven-vg7lv3_1920x1080.png'" alt="snowflake(雪花算法)"/></a><div class="content"><a class="title" href="/tallpeekaboo.github.io/2021/04/13/snowflake-%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95/" title="snowflake(雪花算法)">snowflake(雪花算法)</a><time datetime="2021-04-13T12:01:07.000Z" title="Created 2021-04-13 20:01:07">2021-04-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/tallpeekaboo.github.io/2021/03/29/summary/" title="summary"><img src="https://w.wallhaven.cc/full/nz/wallhaven-nz16og.jpg" onerror="this.onerror=null;this.src='/tallpeekaboo.github.io/img/wallhaven-vg7lv3_1920x1080.png'" alt="summary"/></a><div class="content"><a class="title" href="/tallpeekaboo.github.io/2021/03/29/summary/" title="summary">summary</a><time datetime="2021-03-29T00:40:24.000Z" title="Created 2021-03-29 08:40:24">2021-03-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/tallpeekaboo.github.io/2021/03/24/websocket%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE/" title="websocket网络传输协议"><img src="https://w.wallhaven.cc/full/39/wallhaven-39zg5v.jpg" onerror="this.onerror=null;this.src='/tallpeekaboo.github.io/img/wallhaven-vg7lv3_1920x1080.png'" alt="websocket网络传输协议"/></a><div class="content"><a class="title" href="/tallpeekaboo.github.io/2021/03/24/websocket%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE/" title="websocket网络传输协议">websocket网络传输协议</a><time datetime="2021-03-24T13:42:13.000Z" title="Created 2021-03-24 21:42:13">2021-03-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/tallpeekaboo.github.io/2021/03/22/%E5%B9%B6%E5%8F%91%E5%B9%B6%E8%A1%8C%E9%AB%98%E5%B9%B6%E5%8F%91/" title="并发并行高并发"><img src="https://w.wallhaven.cc/full/m9/wallhaven-m9q6e9.jpg" onerror="this.onerror=null;this.src='/tallpeekaboo.github.io/img/wallhaven-vg7lv3_1920x1080.png'" alt="并发并行高并发"/></a><div class="content"><a class="title" href="/tallpeekaboo.github.io/2021/03/22/%E5%B9%B6%E5%8F%91%E5%B9%B6%E8%A1%8C%E9%AB%98%E5%B9%B6%E5%8F%91/" title="并发并行高并发">并发并行高并发</a><time datetime="2021-03-22T13:22:12.000Z" title="Created 2021-03-22 21:22:12">2021-03-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/tallpeekaboo.github.io/2021/03/22/golang/" title="golang"><img src="https://w.wallhaven.cc/full/57/wallhaven-577839.jpg" onerror="this.onerror=null;this.src='/tallpeekaboo.github.io/img/wallhaven-vg7lv3_1920x1080.png'" alt="golang"/></a><div class="content"><a class="title" href="/tallpeekaboo.github.io/2021/03/22/golang/" title="golang">golang</a><time datetime="2021-03-22T02:56:27.000Z" title="Created 2021-03-22 10:56:27">2021-03-22</time></div></div></div></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tallpeekaboo.github.io/tags/ant-design/" style="font-size: 1.1em; color: #999">ant design</a> <a href="/tallpeekaboo.github.io/tags/django/" style="font-size: 1.5em; color: #99a9bf">django</a> <a href="/tallpeekaboo.github.io/tags/docker/" style="font-size: 1.5em; color: #99a9bf">docker</a> <a href="/tallpeekaboo.github.io/tags/git/" style="font-size: 1.5em; color: #99a9bf">git</a> <a href="/tallpeekaboo.github.io/tags/golang/" style="font-size: 1.1em; color: #999">golang</a> <a href="/tallpeekaboo.github.io/tags/hexo/" style="font-size: 1.1em; color: #999">hexo</a> <a href="/tallpeekaboo.github.io/tags/mongoDB/" style="font-size: 1.5em; color: #99a9bf">mongoDB</a> <a href="/tallpeekaboo.github.io/tags/mysql/" style="font-size: 1.1em; color: #999">mysql</a> <a href="/tallpeekaboo.github.io/tags/redis/" style="font-size: 1.1em; color: #999">redis</a> <a href="/tallpeekaboo.github.io/tags/selenium/" style="font-size: 1.1em; color: #999">selenium</a> <a href="/tallpeekaboo.github.io/tags/snowflake/" style="font-size: 1.1em; color: #999">snowflake</a> <a href="/tallpeekaboo.github.io/tags/websocket/" style="font-size: 1.1em; color: #999">websocket</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>Archives</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/tallpeekaboo.github.io/archives/2021/04/"><span class="card-archive-list-date">April 2021</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/tallpeekaboo.github.io/archives/2021/03/"><span class="card-archive-list-date">March 2021</span><span class="card-archive-list-count">8</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/tallpeekaboo.github.io/archives/2021/01/"><span class="card-archive-list-date">January 2021</span><span class="card-archive-list-count">5</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article :</div><div class="item-count">14</div></div><div class="webinfo-item"><div class="item-name">Run time :</div><div class="item-count" id="runtimeshow" data-publishDate="2021-04-20T01:56:03.851Z"></div></div><div class="webinfo-item"><div class="item-name">UV :</div><div class="item-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="item-name">PV :</div><div class="item-count" id="busuanzi_value_site_pv"></div></div><div class="webinfo-item"><div class="item-name">Last Push :</div><div class="item-count" id="last-push-date" data-lastPushDate="2021-04-20T01:56:03.851Z"></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By peekaboo</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/tallpeekaboo.github.io/js/utils.js"></script><script src="/tallpeekaboo.github.io/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="100" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js" async="async" mobile="false"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="入目无他人,四下皆是你" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/tallpeekaboo.github.io/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/tallpeekaboo.github.io/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>

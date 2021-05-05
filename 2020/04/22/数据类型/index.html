@@ -1,0 +1,576 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>数据类型 | peekaboo的技术博客</title><meta name="keywords" content="python"><meta name="author" content="peekaboo"><meta name="copyright" content="peekaboo"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="数据管理 &gt; (list&#x2F;tuple&#x2F;dict&#x2F;set&#x2F;frozenset&#x2F;int&#x2F;str) &gt; 常用内置方法 &gt; 字符串操作(match&#x2F;search) &gt; py2和py3的区别(dict 有序,新语法糖:箭头关键字) &gt; 可变(list dict set)与不可变(tuple&#x2F;int&#x2F;frozenset) &gt; 深拷贝与浅拷贝(是否影响原对象,举例子克隆人与">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据类型">
+<meta property="og:url" content="https://peekaboo.ren/2020/04/22/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">
+<meta property="og:site_name" content="peekaboo的技术博客">
+<meta property="og:description" content="数据管理 &gt; (list&#x2F;tuple&#x2F;dict&#x2F;set&#x2F;frozenset&#x2F;int&#x2F;str) &gt; 常用内置方法 &gt; 字符串操作(match&#x2F;search) &gt; py2和py3的区别(dict 有序,新语法糖:箭头关键字) &gt; 可变(list dict set)与不可变(tuple&#x2F;int&#x2F;frozenset) &gt; 深拷贝与浅拷贝(是否影响原对象,举例子克隆人与">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/04/22/HokbTWKhuaFXcJG.png">
+<meta property="article:published_time" content="2020-04-22T05:49:10.000Z">
+<meta property="article:modified_time" content="2021-05-05T23:36:10.128Z">
+<meta property="article:author" content="peekaboo">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/04/22/HokbTWKhuaFXcJG.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://peekaboo.ren/2020/04/22/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+};
+
+const saveToLocal = {
+  // ttl 單位是 天
+  set: function setWithExpiry(key, value, ttl) {
+    if (ttl === 0) return
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}
+
+// https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+const getScript = url => new Promise((resolve, reject) => {
+  const script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.onerror = reject
+  script.onload = script.onreadystatechange = function() {
+    const loadState = this.readyState
+    if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+    script.onload = script.onreadystatechange = null
+    resolve()
+  }
+  document.head.appendChild(script)
+})</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-05-06 07:36:10'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><div class="aplayer" data-id="6720858473" data-server="netease" data-type="playlist" data-fixed="true" data-listFolded="false" data-order="random" data-preload="auto"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lete114/CDN/music/APlayer/APlayer.min.css"><script src="https://cdn.jsdelivr.net/gh/lete114/CDN/music/APlayer/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@1.2.0/dist/Meting.min.js"></script><meta name="generator" content="Hexo 5.2.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.png" onerror="onerror=null;src='/img/wallhaven-vg7lv3_1920x1080.png'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">18</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">14</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2021/04/22/le7MvApL6CGzmrx.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">peekaboo的技术博客</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">数据类型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2020-04-22T05:49:10.000Z" title="Created 2020-04-22 13:49:10">2020-04-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-05-05T23:36:10.128Z" title="Updated 2021-05-06 07:36:10">2021-05-06</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<h3 id="数据管理-gt-list-tuple-dict-set-frozenset-int-str-gt-常用内置方法-gt-字符串操作-match-search-gt-py2和py3的区别-dict-有序-新语法糖-箭头关键字-gt-可变-list-dict-set-与不可变-tuple-int-frozenset-gt-深拷贝与浅拷贝-是否影响原对象-举例子克隆人与化名-gt-浅拷贝三种情况-gt-切片是浅拷贝-gt-值传递引用传递-gt-行参与实参-菜单与小费-gt-不定长参数-args-kwargs"><a href="#数据管理-gt-list-tuple-dict-set-frozenset-int-str-gt-常用内置方法-gt-字符串操作-match-search-gt-py2和py3的区别-dict-有序-新语法糖-箭头关键字-gt-可变-list-dict-set-与不可变-tuple-int-frozenset-gt-深拷贝与浅拷贝-是否影响原对象-举例子克隆人与化名-gt-浅拷贝三种情况-gt-切片是浅拷贝-gt-值传递引用传递-gt-行参与实参-菜单与小费-gt-不定长参数-args-kwargs" class="headerlink" title="数据管理 &gt; (list/tuple/dict/set/frozenset/int/str) &gt; 常用内置方法 &gt; 字符串操作(match/search) &gt; py2和py3的区别(dict 有序,新语法糖:箭头关键字) &gt; 可变(list dict set)与不可变(tuple/int/frozenset) &gt; 深拷贝与浅拷贝(是否影响原对象,举例子克隆人与化名) &gt; 浅拷贝三种情况 &gt; 切片是浅拷贝 &gt; 值传递引用传递 &gt; 行参与实参(菜单与小费) &gt; 不定长参数(*args/**kwargs)"></a>数据管理 &gt; (list/tuple/dict/set/frozenset/int/str) &gt; 常用内置方法 &gt; 字符串操作(match/search) &gt; py2和py3的区别(dict 有序,新语法糖:箭头关键字) &gt; 可变(list dict set)与不可变(tuple/int/frozenset) &gt; 深拷贝与浅拷贝(是否影响原对象,举例子克隆人与化名) &gt; 浅拷贝三种情况 &gt; 切片是浅拷贝 &gt; 值传递引用传递 &gt; 行参与实参(菜单与小费) &gt; 不定长参数(*args/**kwargs)</h3></blockquote>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><ul>
+<li><h3 id="list"><a href="#list" class="headerlink" title="list"></a>list</h3><ul>
+<li><p>append  <em>在列表末尾追加新的元素</em></p>
+</li>
+<li><p>cont  统计某个元素在列表中出现的次数</p>
+</li>
+<li><p>extend  在列表的末尾一次性追加另一个序列中的多个值</p>
+</li>
+<li><p>index  从列表中找出某个值第一个匹配项的索引位置</p>
+</li>
+<li><p>insert  用于将对象插入到列表中</p>
+</li>
+<li><p>pop  移除列表中的一个元素(默认最后一个),返回该元素的值</p>
+</li>
+<li><p>remove  用于移除列表中某个值的第一个匹配项</p>
+</li>
+<li><p>reverse  方法将列表中的元素反向存放</p>
+</li>
+<li><p>sort  对列表进行排序,改变原来的列表</p>
+</li>
+</ul>
+</li>
+<li><h3 id="tuple"><a href="#tuple" class="headerlink" title="tuple"></a>tuple</h3><ul>
+<li><p>比较两个值</p>
+<ul>
+<li><pre><code class="python">com(x,y)
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 返回列表的长度</span><br><span class="line"></span><br><span class="line">  - &#96;&#96;&#96;python</span><br><span class="line">    len(seq)</span><br></pre></td></tr></table></figure></code></pre>
+</li>
+</ul>
+</li>
+<li><p>把序列转换成列表</p>
+<ul>
+<li><pre><code class="python">list(seq)
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 返回序列或者参数集合中得最大值</span><br><span class="line"></span><br><span class="line">  - &#96;&#96;&#96;python</span><br><span class="line">    max(args)</span><br></pre></td></tr></table></figure></code></pre>
+</li>
+</ul>
+</li>
+<li><p>返回序列或者参数集合中的最小值</p>
+<ul>
+<li><pre><code class="python">min(args)
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 对序列进行反向迭代</span><br><span class="line"></span><br><span class="line">  - &#96;&#96;&#96;python</span><br><span class="line">    reversed(seq)</span><br></pre></td></tr></table></figure></code></pre>
+</li>
+</ul>
+</li>
+<li><p>返回已经排列的包含seq 所有元素的列表</p>
+<ul>
+<li><pre><code class="python">sorted(seq)
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 把序列转换为元组</span><br><span class="line"></span><br><span class="line">  - &#96;&#96;&#96;python</span><br><span class="line">    tuple(seq)</span><br></pre></td></tr></table></figure></code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h3 id="dict"><a href="#dict" class="headerlink" title="dict"></a>dict</h3><ul>
+<li><p>clear</p>
+<ul>
+<li><p>clear方法清除字典中所有的项，这是一个原地操作，所以无返回值（或则说返回None）</p>
+<ul>
+<li><pre><code class="python">d = &#123;&#125;
+d[&#39;Tom&#39;]=8777             # 在字典中添加数据           
+d[&#39;Jack&#39;]=9999    
+print(d)                 #the result : &#123;&#39;Jack&#39;: 9999, &#39;Tom&#39;: 8777&#125;
+d.clear()
+print(d)                #the result : &#123;&#125;
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- copy</span><br><span class="line"></span><br><span class="line">  - copy方法返回一个具有相同 ”键-值” 对的新字典，而不是副本</span><br><span class="line"></span><br><span class="line">    - &#96;&#96;&#96;python</span><br><span class="line">      d &#x3D; &#123;&#39;Tom&#39;:8777,&#39;Fly&#39;:6666&#125;</span><br><span class="line">      a &#x3D; d.copy()</span><br><span class="line">      a[&#39;Tom&#39;] &#x3D; &#39;改变后的值&#39;</span><br><span class="line">      print(d)                        #&#123;&#39;Fly&#39;: 6666, &#39;Tom&#39;: 8777&#125;</span><br><span class="line">      print(a)                        #&#123;&#39;Fly&#39;: 6666, &#39;Tom&#39;: &#39;改变后的值&#39;&#125;</span><br></pre></td></tr></table></figure></code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>fromkeys</p>
+<ul>
+<li><p>fromkeys方法使用给定的键建立新的字典，每个键都对应一个默认的值None。</p>
+<ul>
+<li><pre><code class="python">print(&#123;&#125;.fromkeys([&#39;name&#39;,&#39;age&#39;]))         #the result　：　&#123;&#39;age&#39;: None, &#39;name&#39;: None&#125;
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- get</span><br><span class="line"></span><br><span class="line">  - get方法是个更宽松的访问字典项的方法，如果试图访问字典中不存在的项时不会报错仅会 返回：None</span><br><span class="line"></span><br><span class="line">    - &#96;&#96;&#96;python</span><br><span class="line">      d &#x3D; &#123;&#39;Tom&#39;:8777,&#39;Jack&#39;:8888,&#39;Fly&#39;:6666&#125;</span><br><span class="line">      print(d.get(&#39;Tom&#39;))                              #the result ：     8777</span><br><span class="line">      print(d.get(&#39;not_exist&#39;))                          #the result ：     None</span><br></pre></td></tr></table></figure></code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>循环字典</p>
+<ul>
+<li><pre><code class="python">d = &#123;&#39;Tom&#39;:8777,&#39;Jack&#39;:8888,&#39;Fly&#39;:6666&#125;
+# 方法1：
+for k,v in d.items():
+    print(k,v)
+# 方法2
+for k in d.values():
+    print(k)
+# 方法:3
+for k in d.keys():
+    print(k)
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- pop</span><br><span class="line"></span><br><span class="line">  - pop方法用于获得对应与给定键的值，然后将这个”键-值”对从字典中移除</span><br><span class="line"></span><br><span class="line">    - &#96;&#96;&#96;python</span><br><span class="line">      d &#x3D; &#123;&#39;Tom&#39;:8777,&#39;Jack&#39;:8888,&#39;Fly&#39;:6666&#125;</span><br><span class="line">      v &#x3D; d.pop(&#39;Tom&#39;)</span><br><span class="line">      print(v)                    #8777</span><br></pre></td></tr></table></figure></code></pre>
+</li>
+</ul>
+</li>
+<li><p>update</p>
+<ul>
+<li><p>update方法可以利用一个字典项更新另一个字典，提供的字典中的项会被添加到旧的字典中，如有相同的键则会被覆盖</p>
+<ul>
+<li><pre><code class="python">d = &#123;&#39;Tom&#39;:8777,&#39;Jack&#39;:8888,&#39;Fly&#39;:6666&#125;
+a = &#123;&#39;Tom&#39;:110,&#39;Test&#39;:119&#125;
+d.update(a)
+print(d)                        #the result ：&#123;&#39;Fly&#39;: 6666, &#39;Test&#39;: 119, &#39;Jack&#39;: 8888, &#39;Tom&#39;: 110&#125;
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 将两个列表组成字典</span><br><span class="line"></span><br><span class="line">  - &#96;&#96;&#96;python</span><br><span class="line">    keys &#x3D; [&#39;a&#39;, &#39;b&#39;]</span><br><span class="line">    values &#x3D; [1, 2]</span><br><span class="line">    #1、zip生成字典</span><br><span class="line">    print(dict(zip(keys,values)))                              # &#123;&#39;a&#39;: 1, &#39;b&#39;: 2&#125;</span><br><span class="line">    #2、for循环推倒字典</span><br><span class="line">    print(&#123;keys[i]: values[i] for i in range(len(keys))&#125;)              # &#123;&#39;a&#39;: 1, &#39;b&#39;: 2&#125;</span><br></pre></td></tr></table></figure></code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h3 id="set"><a href="#set" class="headerlink" title="set"></a>set</h3><ul>
+<li><p>去重</p>
+<ul>
+<li><pre><code class="python">list_1 = [1,2,3,4,5,1,2]
+#1、去重(去除list_1中重复元素1,2)
+list_1 = set(list_1)                                #去重： &#123;1, 2, 3, 4, 5&#125;
+print(list_1)
+list_2 = set([4,5,6,7,8])
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 交集</span><br><span class="line"></span><br><span class="line">  - &#96;&#96;&#96;python</span><br><span class="line">    #2、交集（在list_1和list_2中都有的元素4,5）</span><br><span class="line">    print(list_1.intersection(list_2))                      #交集： &#123;4, 5&#125;</span><br><span class="line">    </span><br><span class="line">    print(list_1 &amp; list_2)                                  #交集    &#123;4, 5&#125;</span><br></pre></td></tr></table></figure></code></pre>
+</li>
+</ul>
+</li>
+<li><p>并集</p>
+<ul>
+<li><pre><code class="python">#3、并集（在list_1和list_2中的元素全部打印出来，重复元素仅打印一次）
+print(list_1.union(list_2))                          #并集： &#123;1, 2, 3, 4, 5, 6, 7, 8&#125;
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 差集</span><br><span class="line"></span><br><span class="line">  - &#96;&#96;&#96;python</span><br><span class="line">    #4、差集</span><br><span class="line">    print(list_1.difference(list_2))                        #差集：在list_1中有在list_2中没有：   &#123;1, 2, 3&#125;</span><br><span class="line">    print(list_2.difference(list_1))                        #差集：在list_1中有在list_2中没有：   &#123;8, 6, 7&#125;</span><br></pre></td></tr></table></figure></code></pre>
+</li>
+</ul>
+</li>
+<li><p>子集</p>
+<ul>
+<li><pre><code class="python">#5、子集
+print(list_1.issubset(list_2))                          #子集：    False    List_1中的元素是否全部在list2中
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 父集</span><br><span class="line"></span><br><span class="line">  - &#96;&#96;&#96;python</span><br><span class="line">    #6、父集</span><br><span class="line">    print(list_1.issuperset(list_2))                        #父集：    False    List_1中是否包含list_2中的所有元素</span><br></pre></td></tr></table></figure></code></pre>
+</li>
+</ul>
+</li>
+<li><p>在集合中添加一个元素</p>
+<ul>
+<li><pre><code class="python">#7、在集合中添加一个元素999
+list_1.add(999)
+print(list_1)                                       #Add()方法：          &#123;1, 2, 3, 4, 5, 999&#125;
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 删除集合中指定元素,如果元素不存在返回None</span><br><span class="line"></span><br><span class="line">  - &#96;&#96;&#96;python</span><br><span class="line">    #12、discard删除集合中的指定元素，如过没有则返回None</span><br><span class="line">    print(list_1.discard(&quot;ddd&quot;))                            #Discard()方法：   删除指定的值，没有返回None</span><br></pre></td></tr></table></figure></code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h3 id="str"><a href="#str" class="headerlink" title="str"></a>str</h3><ul>
+<li><p>find</p>
+<ul>
+<li><p>find方法可以在一个较长的字符串中查找子串，他返回子串所在位置的最左端索引，如果没有找到则返回-1</p>
+</li>
+<li><pre><code class="python">a = &#39;abcdefghijk&#39;
+print(a.find(&#39;abc&#39;))                         #the result ： 0
+print(a.find(&#39;abc&#39;,10,100))                    #the result ： 11  指定查找的起始和结束查找位置
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- join</span><br><span class="line"></span><br><span class="line">  - join方法是非常重要的字符串方法，他是split方法的逆方法，用来连接序列中的元素，并且需要被连接的元素都必须是字符串。</span><br><span class="line"></span><br><span class="line">  - &#96;&#96;&#96;python</span><br><span class="line">    a &#x3D; [&#39;1&#39;,&#39;2&#39;,&#39;3&#39;]</span><br><span class="line">    print(&#39;+&#39;.join(a))                                    #the result ： 1+2+3</span><br></pre></td></tr></table></figure></code></pre>
+</li>
+</ul>
+</li>
+<li><p>split</p>
+<ul>
+<li><p>这是一个非常重要的字符串，它是join的逆方法，用来将字符串分割成序列</p>
+</li>
+<li><pre><code class="python">print(&#39;1+2+3+4&#39;.split(&#39;+&#39;))                            #the result ： [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;]
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- strip</span><br><span class="line"></span><br><span class="line">  - strip 方法返回去除首位空格（不包括内部）的字符串</span><br><span class="line"></span><br><span class="line">  - &#96;&#96;&#96;python</span><br><span class="line">    print(&quot;   test   test    &quot;.strip())                #the result ：“test   test”</span><br></pre></td></tr></table></figure></code></pre>
+</li>
+</ul>
+</li>
+<li><p>replace</p>
+<ul>
+<li><p>replace方法返回某字符串所有匹配项均被替换之后得到字符串</p>
+</li>
+<li><pre><code class="python">print(&quot;This is a test&quot;.replace(&#39;is&#39;,&#39;is_test&#39;))     #the result ： This_test is_test a test
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- 使用format字符串格式化</span><br><span class="line"></span><br><span class="line">  - &#96;&#96;&#96;python</span><br><span class="line">    #1. 位置参数</span><br><span class="line">    print(&quot;&#123;0&#125; is &#123;1&#125; years old&quot;.format(&quot;tom&quot;, 28))            #tom is 28 years old</span><br><span class="line">    print(&quot;&#123;&#125; is &#123;&#125; years old&quot;.format(&quot;tom&quot;, 28))             #tom is 28 years old</span><br><span class="line">    print(&quot;Hi, &#123;0&#125;! &#123;0&#125; is &#123;1&#125; years old&quot;.format(&quot;tom&quot;, 28))      #Hi, tom! tom is 28 years old</span><br><span class="line">    </span><br><span class="line">    #2. 关键字参数</span><br><span class="line">    print(&quot;&#123;name&#125; is &#123;age&#125; years old&quot;.format(name &#x3D; &quot;tom&quot;, age &#x3D; 28))    #tom is 28 years old</span><br><span class="line">    </span><br><span class="line">    #3. 下标参数</span><br><span class="line">    li &#x3D; [&quot;tom&quot;, 28]</span><br><span class="line">    print(&quot;&#123;0[0]&#125; is &#123;0[1]&#125; years old&quot;.format(li))          #tom is 28 years old</span><br></pre></td></tr></table></figure></code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h3 id="frozenset"><a href="#frozenset" class="headerlink" title="frozenset"></a>frozenset</h3><ul>
+<li>有序集合,不能添加和删除任何元素</li>
+</ul>
+</li>
+<li><h3 id="python2和python3的区别"><a href="#python2和python3的区别" class="headerlink" title="python2和python3的区别"></a>python2和python3的区别</h3><ul>
+<li><p>python2</p>
+<ul>
+<li><blockquote>
+<p>类需要继承(object)顶级父类</p>
+</blockquote>
+<ul>
+<li><pre><code class="python">class test(object):
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">      </span><br><span class="line">      </span><br><span class="line"></span><br><span class="line">  - &gt;input输入的是int类型</span><br><span class="line"></span><br><span class="line">  - &gt; &#x2F;表示根据除数被除数小数点位得到结果</span><br><span class="line"></span><br><span class="line">- python3</span><br><span class="line"></span><br><span class="line">  - &gt; 类默认继承(object)顶级父类,不用声明</span><br><span class="line"></span><br><span class="line">  	- &#96;&#96;&#96;python</span><br><span class="line">    	class test:</span><br></pre></td></tr></table></figure></code></pre>
+</li>
+</ul>
+</li>
+<li><blockquote>
+<p>input输入的是str类型</p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>Python3中/表示整除</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h3 id="字符串操作match和search"><a href="#字符串操作match和search" class="headerlink" title="字符串操作match和search"></a>字符串操作match和search</h3><ul>
+<li><h4 id="match方法"><a href="#match方法" class="headerlink" title="match方法"></a>match方法</h4><ul>
+<li>re.match(): 尝试从字符串的起始位置匹配一个模式，如果不是起始位置匹配成功的话，match()就返回none</li>
+</ul>
+</li>
+<li><h4 id="正则之search"><a href="#正则之search" class="headerlink" title="正则之search"></a>正则之search</h4><ul>
+<li><strong>re.search</strong> 扫描整个字符串并返回<strong>第一个成功的匹配</strong></li>
+</ul>
+</li>
+<li><p>re.match(): 语法</p>
+<ul>
+<li>re.match(pattern, string, flags=0)</li>
+</ul>
+</li>
+<li><p>匹配类型：</p>
+<ul>
+<li>没有次数限制的匹配为贪婪匹配</li>
+<li>有次数限制的匹配为非贪婪匹配</li>
+<li>{3，} 表示最少为3次，是贪婪匹配</li>
+<li>{，100}表示最多</li>
+</ul>
+</li>
+<li><p>正则之findall </p>
+<ul>
+<li>在字符串中找到正则表达式所匹配的<strong>所有子串</strong>，并返回一个<strong>列表</strong>，如果没有找到匹配的，则返回空列表</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>pattern</th>
+<th>匹配的正则表达式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>string</td>
+<td>要匹配的字符串。</td>
+</tr>
+<tr>
+<td>flags</td>
+<td>标志位，用于控制正则表达式的匹配方式，如：是否区分大小写，多行匹配等等。</td>
+</tr>
+</tbody></table>
+<pre><code>                 匹配成功**re.match**方法返回一个匹配的**对象**，否则返回None。</code></pre>
+<p><em>正则匹配单字符</em></p>
+<table>
+<thead>
+<tr>
+<th><strong>字符</strong></th>
+<th><strong>功能</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>.</td>
+<td>匹配任意1个字符（除了\n）</td>
+</tr>
+<tr>
+<td>[  ]</td>
+<td>匹配[ ]中列举的任意一个字符</td>
+</tr>
+<tr>
+<td>\d</td>
+<td>匹配单个数字，即0-9</td>
+</tr>
+<tr>
+<td>\D</td>
+<td>匹配非数字，即不是数字</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>匹配空白，即 空格</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>匹配非空白</td>
+</tr>
+<tr>
+<td>\w</td>
+<td>匹配单词字符，即a-z、A-Z、0-9、_</td>
+</tr>
+<tr>
+<td>\W</td>
+<td>匹配非单词字符</td>
+</tr>
+</tbody></table>
+<p><em>匹配多个字符</em></p>
+<table>
+<thead>
+<tr>
+<th><strong>字符</strong></th>
+<th><strong>功能</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>*</td>
+<td>匹配前一个字符出现0次或者无限次，即可有可无</td>
+</tr>
+<tr>
+<td>+</td>
+<td>匹配前一个字符出现1次或者无限次，即至少有1次</td>
+</tr>
+<tr>
+<td>?</td>
+<td>匹配前一个字符出现1次或者0次，即要么有1次，要么没有</td>
+</tr>
+<tr>
+<td>{m}</td>
+<td>匹配前一个字符出现m次</td>
+</tr>
+<tr>
+<td>{m,n}</td>
+<td>匹配前一个字符出现从m到n次</td>
+</tr>
+</tbody></table>
+<ul>
+<li><h3 id="可变与不可变"><a href="#可变与不可变" class="headerlink" title="可变与不可变"></a>可变与不可变</h3><ul>
+<li><p>可变</p>
+<ul>
+<li><p>tuple</p>
+</li>
+<li><p>int</p>
+</li>
+<li><p>string</p>
+</li>
+<li><pre><code class="python">a = 1
+print(id(a))
+b = 1
+print(id(b))
+a = 2
+print(id(a))
+b = 2
+print(id(b))
+c = b
+print(id(c))
+a += 2
+print(id(a))
+
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>  ------------
+  140728969559104
+  140728969559104
+  140728969559136
+  140728969559136
+  140728969559136
+  140728969559200
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">    - 上面这段程序都是对不可变数据类型中的int类型的操作，id()查看的是当前变量的地址值。我们先来看a &#x3D; 1和b &#x3D; 1两个操作的结果，从上面的输出可以看到a和b在此时的地址值是一样的，也就是说a和b其实是引用了同一个对象，即1，也就是说内存中对于1只占用了一个地址，而不管有多少个引用指向了它，都只有一个地址值，只是有一个引用计数会记录指向这个地址的引用到底有几个而已。</span><br><span class="line">    </span><br><span class="line">    - 当我们进行a &#x3D; 2赋值时，发现a的地址值变了，虽然还是a这个引用，但是其地址值却变化了，后面的b &#x3D; 2以及c &#x3D; b，使得a、b和c都引用了同一个对象，即2，所以地址值都是一样的。当a和b都被赋值2后，1这个对象已经没有引用指向它了，所以1这个对象占用的内存，即140728969559104地址要被“垃圾回收”，即1这个对象在内存中已经不存在了。最后，a进行了加2的操作，所以创建了新的对象4，a引用了这个新的对象，而不再引用2这个对象。</span><br><span class="line">    </span><br><span class="line">    - 那么为什么称之为不可变数据类型呢？这里的不可变可以理解为a引用的地址处的值是不能被改变的，也就是140728969559104地址处的值在没被垃圾回收之前一直都是1，不能改变，如果要把a赋值为2，那么只能将a引用的地址从140728969559104变为140728969559136，相当于a &#x3D; 2这个赋值又创建了一个对象，即2这个对象，然后a、b、c都引用了这个对象，所以int这个数据类型是不可变的，如果想对int类型的变量再次赋值，在内存中相当于又创建了一个新的对象，而不再是之前的对象。</span><br><span class="line">  </span><br><span class="line">- ### 深拷贝与浅拷贝(是否影响原对象,举例子克隆人与化名) </span><br><span class="line"></span><br><span class="line">  - 浅拷贝copy:  &#96;不管多么复杂的数据结构，浅拷贝都只会copy一层&#96;</span><br><span class="line"></span><br><span class="line">  - 浅拷贝遇到的三种情况</span><br><span class="line">    </span><br><span class="line">    - &#96;&#96;&#96;python</span><br><span class="line">      拷贝对象是可变类型嵌套时,会影响原对象</span><br><span class="line">      import copy</span><br><span class="line">      a &#x3D; &#123;1:[1,2,3]&#125;</span><br><span class="line">      b &#x3D; a.copy()</span><br><span class="line">      print(a,b)</span><br><span class="line">      a[1].append(4)</span><br><span class="line">      print(a,b)</span><br><span class="line">      </span><br><span class="line">      ---------------------</span><br><span class="line">    &#123;1: [1, 2, 3]&#125; &#123;1: [1, 2, 3]&#125;</span><br><span class="line">      &#123;1: [1, 2, 3, 4]&#125; &#123;1: [1, 2, 3, 4]&#125;</span><br></pre></td></tr></table></figure>
+- ```python
+  拷贝对象是可变类型时,不会影响原对象
+  a = [1,2,3]
+  b = a.copy()
+  print(a,b)
+  a.append(4)
+  print(a,b)
+
+  --------------------
+  [1, 2, 3, 4] [1, 2, 3]
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- &#96;&#96;&#96;python</span><br><span class="line">拷贝对象是不可变类型时,使用浅拷贝一定会改变原对象</span><br><span class="line">  a &#x3D; (1,2,[1,2])</span><br><span class="line">  b &#x3D; copy.copy(a)</span><br><span class="line">  print(id(a),id(b))</span><br><span class="line">  b[2].append(3)</span><br><span class="line">  </span><br><span class="line">  print(id(a),id(b))</span><br><span class="line">  print(a,b)</span><br></pre></td></tr></table></figure></code></pre>
+<ul>
+<li><p>深拷贝deepcopy:  <code>深拷贝会完全复制原变量相关的所有数据，在内存中生成一套完全一样的内容，我们对这两个变量中任意一个修改都不会影响其他变量</code></p>
+<ul>
+<li><p>```python<br>import copy<br>c = copy.deepcopy(a)<br>print(a,c)<br>a[1].append(5)<br>print(a,c)</p>
+<hr>
+<p>{1: [1, 2, 3, 4]} {1: [1, 2, 3, 4]}<br>{1: [1, 2, 3, 4, 5]} {1: [1, 2, 3, 4]}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">  </span><br><span class="line">  -  b &#x3D; a 赋值引用,a和b都指向同一个变量![浅拷贝与深拷贝.png](https:&#x2F;&#x2F;i.loli.net&#x2F;2021&#x2F;04&#x2F;27&#x2F;asu4ESUACir5GMX.png)</span><br><span class="line">  </span><br><span class="line">  - &#96;b &#x3D; a.copy(): 浅拷贝, a 和 b 是一个独立的对象，但他们的子对象还是指向统一对象（是引用）&#96;![浅拷贝与和深拷贝2.png](https:&#x2F;&#x2F;i.loli.net&#x2F;2021&#x2F;04&#x2F;27&#x2F;hcDjdRTCrVp1eZq.png)</span><br><span class="line">  </span><br><span class="line">  - &#96;b &#x3D; copy.deepcopy(a): 深度拷贝, a 和 b 完全拷贝了父对象及其子对象，两者是完全独立的&#96;![浅拷贝与深拷贝3.png](https:&#x2F;&#x2F;i.loli.net&#x2F;2021&#x2F;04&#x2F;27&#x2F;qRbmPLD3kiwAvWl.png)</span><br><span class="line">  </span><br><span class="line">- ### 值传递引用传递</span><br><span class="line"></span><br><span class="line">  - 不可变类型传递的是值</span><br><span class="line">  - 可变类型传递的引用地址</span><br><span class="line"></span><br><span class="line">- ### 形参与实参(菜单与小费)</span><br><span class="line"></span><br><span class="line">  - 形参</span><br><span class="line">    - 形式上接到的参数</span><br><span class="line">  - 实参</span><br><span class="line">    - 实际上接到的参数</span><br><span class="line"></span><br><span class="line">- ### 不定长参数</span><br><span class="line"></span><br><span class="line">  - *args</span><br><span class="line"></span><br><span class="line">    - 在传入额外的参数时可以不用指明参数名，直接传入参数值即可。</span><br><span class="line">    - 加了一个星号 * 不定长参数会以元组(tuple)的形式导入，存放所有未命名的变量参数。</span><br><span class="line"></span><br><span class="line">  - **kwargs</span><br><span class="line"></span><br><span class="line">    - 这种类型返回的是字典，传入时需要指定参数名。</span><br><span class="line">    - 加了两个星号 ** 的参数会以字典的形式导入，存放已命名的变量参数。</span><br><span class="line"></span><br><span class="line">  - &#96;&#96;&#96;python</span><br><span class="line">    #第一个是元组形式，第二个是字典形式</span><br><span class="line">    def sun(*a, **b):</span><br><span class="line">        print(a)</span><br><span class="line">        print(b)</span><br><span class="line">    </span><br><span class="line">    sun(1, 55258, x&#x3D;25412, y&#x3D;5123512)</span><br><span class="line">    </span><br><span class="line">    --------------------------</span><br><span class="line">    (1, 55258)</span><br><span class="line">    &#123;&#39;x&#39;: 25412, &#39;y&#39;: 5123512&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">peekaboo</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://peekaboo.ren/2020/04/22/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">https://peekaboo.ren/2020/04/22/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/python/">python</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/04/22/HokbTWKhuaFXcJG.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/04/28/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/"><img class="prev-cover" src="https://i.loli.net/2021/04/28/IawFrSMqepvyAZt.png" onerror="onerror=null;src='/img/wallhaven-vg7lv3_1920x1080.png'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">观察者模式</div></div></a></div><div class="next-post pull-right"><a href="/2020/04/21/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"><img class="next-cover" src="https://i.loli.net/2021/04/22/le7MvApL6CGzmrx.png" onerror="onerror=null;src='/img/wallhaven-vg7lv3_1920x1080.png'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">内存管理</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2020/04/21/内存管理/" title="内存管理"><img class="cover" src="https://i.loli.net/2021/04/22/le7MvApL6CGzmrx.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-21</div><div class="title">内存管理</div></div></a></div><div><a href="/2020/04/28/观察者模式/" title="观察者模式"><img class="cover" src="https://i.loli.net/2021/04/28/IawFrSMqepvyAZt.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-28</div><div class="title">观察者模式</div></div></a></div><div><a href="/2021/04/30/函数式编程/" title="函数式编程"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-30</div><div class="title">函数式编程</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/wallhaven-vg7lv3_1920x1080.png'" alt="avatar"/><div class="author-info__name">peekaboo</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">18</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">14</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tallpeekaboo"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tallpeekaboo" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:tallpeekaboo@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">入目无他人,四下皆是你</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86-gt-list-tuple-dict-set-frozenset-int-str-gt-%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E6%96%B9%E6%B3%95-gt-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%93%8D%E4%BD%9C-match-search-gt-py2%E5%92%8Cpy3%E7%9A%84%E5%8C%BA%E5%88%AB-dict-%E6%9C%89%E5%BA%8F-%E6%96%B0%E8%AF%AD%E6%B3%95%E7%B3%96-%E7%AE%AD%E5%A4%B4%E5%85%B3%E9%94%AE%E5%AD%97-gt-%E5%8F%AF%E5%8F%98-list-dict-set-%E4%B8%8E%E4%B8%8D%E5%8F%AF%E5%8F%98-tuple-int-frozenset-gt-%E6%B7%B1%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B5%85%E6%8B%B7%E8%B4%9D-%E6%98%AF%E5%90%A6%E5%BD%B1%E5%93%8D%E5%8E%9F%E5%AF%B9%E8%B1%A1-%E4%B8%BE%E4%BE%8B%E5%AD%90%E5%85%8B%E9%9A%86%E4%BA%BA%E4%B8%8E%E5%8C%96%E5%90%8D-gt-%E6%B5%85%E6%8B%B7%E8%B4%9D%E4%B8%89%E7%A7%8D%E6%83%85%E5%86%B5-gt-%E5%88%87%E7%89%87%E6%98%AF%E6%B5%85%E6%8B%B7%E8%B4%9D-gt-%E5%80%BC%E4%BC%A0%E9%80%92%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92-gt-%E8%A1%8C%E5%8F%82%E4%B8%8E%E5%AE%9E%E5%8F%82-%E8%8F%9C%E5%8D%95%E4%B8%8E%E5%B0%8F%E8%B4%B9-gt-%E4%B8%8D%E5%AE%9A%E9%95%BF%E5%8F%82%E6%95%B0-args-kwargs"><span class="toc-number">1.</span> <span class="toc-text">数据管理 &gt; (list&#x2F;tuple&#x2F;dict&#x2F;set&#x2F;frozenset&#x2F;int&#x2F;str) &gt; 常用内置方法 &gt; 字符串操作(match&#x2F;search) &gt; py2和py3的区别(dict 有序,新语法糖:箭头关键字) &gt; 可变(list dict set)与不可变(tuple&#x2F;int&#x2F;frozenset) &gt; 深拷贝与浅拷贝(是否影响原对象,举例子克隆人与化名) &gt; 浅拷贝三种情况 &gt; 切片是浅拷贝 &gt; 值传递引用传递 &gt; 行参与实参(菜单与小费) &gt; 不定长参数(*args&#x2F;**kwargs)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number"></span> <span class="toc-text">数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#list"><span class="toc-number">1.</span> <span class="toc-text">list</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tuple"><span class="toc-number">2.</span> <span class="toc-text">tuple</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dict"><span class="toc-number">3.</span> <span class="toc-text">dict</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set"><span class="toc-number">4.</span> <span class="toc-text">set</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#str"><span class="toc-number">5.</span> <span class="toc-text">str</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#frozenset"><span class="toc-number">6.</span> <span class="toc-text">frozenset</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python2%E5%92%8Cpython3%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">7.</span> <span class="toc-text">python2和python3的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%93%8D%E4%BD%9Cmatch%E5%92%8Csearch"><span class="toc-number">8.</span> <span class="toc-text">字符串操作match和search</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#match%E6%96%B9%E6%B3%95"><span class="toc-number">8.1.</span> <span class="toc-text">match方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E4%B9%8Bsearch"><span class="toc-number">8.2.</span> <span class="toc-text">正则之search</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E5%8F%98%E4%B8%8E%E4%B8%8D%E5%8F%AF%E5%8F%98"><span class="toc-number">9.</span> <span class="toc-text">可变与不可变</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/04/30/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" title="函数式编程"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/wallhaven-vg7lv3_1920x1080.png'" alt="函数式编程"/></a><div class="content"><a class="title" href="/2021/04/30/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" title="函数式编程">函数式编程</a><time datetime="2021-04-30T00:21:09.000Z" title="Created 2021-04-30 08:21:09">2021-04-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/04/13/snowflake-%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95/" title="snowflake(雪花算法)"><img src="https://i.loli.net/2021/04/21/aHD4LQKcpC1o6Ww.png" onerror="this.onerror=null;this.src='/img/wallhaven-vg7lv3_1920x1080.png'" alt="snowflake(雪花算法)"/></a><div class="content"><a class="title" href="/2021/04/13/snowflake-%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95/" title="snowflake(雪花算法)">snowflake(雪花算法)</a><time datetime="2021-04-13T12:01:07.000Z" title="Created 2021-04-13 20:01:07">2021-04-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/03/22/golang/" title="golang"><img src="https://i.loli.net/2021/04/21/ndrSwQCZc6I87aH.png" onerror="this.onerror=null;this.src='/img/wallhaven-vg7lv3_1920x1080.png'" alt="golang"/></a><div class="content"><a class="title" href="/2021/03/22/golang/" title="golang">golang</a><time datetime="2021-03-22T02:56:27.000Z" title="Created 2021-03-22 10:56:27">2021-03-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/03/01/ant%E7%BB%84%E4%BB%B6/" title="ant组件"><img src="https://i.loli.net/2021/04/21/Pf2GIWNToZYAjbe.png" onerror="this.onerror=null;this.src='/img/wallhaven-vg7lv3_1920x1080.png'" alt="ant组件"/></a><div class="content"><a class="title" href="/2021/03/01/ant%E7%BB%84%E4%BB%B6/" title="ant组件">ant组件</a><time datetime="2021-03-01T06:56:37.000Z" title="Created 2021-03-01 14:56:37">2021-03-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/06/21/mysql-redis-mongoDB%E7%9A%84%E5%8C%BA%E5%88%AB/" title="mysql/redis/mongoDB的区别"><img src="https://i.loli.net/2021/04/21/ZDnWfPvB2sijHLp.png" onerror="this.onerror=null;this.src='/img/wallhaven-vg7lv3_1920x1080.png'" alt="mysql/redis/mongoDB的区别"/></a><div class="content"><a class="title" href="/2020/06/21/mysql-redis-mongoDB%E7%9A%84%E5%8C%BA%E5%88%AB/" title="mysql/redis/mongoDB的区别">mysql/redis/mongoDB的区别</a><time datetime="2020-06-21T12:09:11.000Z" title="Created 2020-06-21 20:09:11">2020-06-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By peekaboo</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/gh/lete114/CDN/Sum/title.js"></script><script src="https://cdn.jsdelivr.net/gh/lete114/CDN/Sum/sakura.js"></script><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="100" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js" async="async" mobile="false"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-show-text.min.js" data-mobile="false" data-text="入目无他人,四下皆是你" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
